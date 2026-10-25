@@ -1,4 +1,14 @@
-export const graphStyle = (color: string, line: string, point: string, area: string) =>
+export const DEFAULT_LINE_WIDTH = 4;
+export const DEFAULT_POINT_SIZE = 10;
+
+export const graphStyle = (
+    color: string,
+    line: string,
+    point: string,
+    area: string,
+    lineWidth = DEFAULT_LINE_WIDTH,
+    pointSize = DEFAULT_POINT_SIZE,
+) =>
     `
     .ct-label {
       fill: #${color};
@@ -82,14 +92,14 @@ export const graphStyle = (color: string, line: string, point: string, area: str
     }
 
     .ct-point {
-      stroke-width: 10px;
+      stroke-width: ${pointSize}px;
       stroke-linecap: round;
       stroke: #${point};
       animation: blink 1s ease-in-out forwards;
     }
 
     .ct-line {
-      stroke-width: 4px;
+      stroke-width: ${lineWidth}px;
       stroke-dasharray: 5000;
       stroke-dashoffset: 5000;
       stroke: #${line};

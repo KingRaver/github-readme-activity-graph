@@ -118,6 +118,8 @@ export let fakeQueryStringRes = [
         from: '',
         to: '',
         grid: true,
+        line_width: 4,
+        point_size: 10,
     },
     {
         username: 'githubusername',
@@ -138,6 +140,8 @@ export let fakeQueryStringRes = [
         from: '',
         to: '',
         grid: true,
+        line_width: 4,
+        point_size: 10,
     },
     {
         username: 'githubusername',
@@ -158,6 +162,8 @@ export let fakeQueryStringRes = [
         from: '',
         to: '',
         grid: true,
+        line_width: 4,
+        point_size: 10,
     },
     {
         username: 'githubusername',
@@ -178,6 +184,8 @@ export let fakeQueryStringRes = [
         from: '',
         to: '',
         grid: true,
+        line_width: 4,
+        point_size: 10,
     },
     {
         username: 'githubusername',
@@ -198,6 +206,8 @@ export let fakeQueryStringRes = [
         from: '',
         to: '',
         grid: true,
+        line_width: 4,
+        point_size: 10,
     },
     {
         username: 'githubusername',
@@ -218,6 +228,8 @@ export let fakeQueryStringRes = [
         from: '',
         to: '',
         grid: true,
+        line_width: 4,
+        point_size: 10,
     },
     {
         username: 'githubusername',
@@ -238,6 +250,8 @@ export let fakeQueryStringRes = [
         from: '',
         to: '',
         grid: true,
+        line_width: 4,
+        point_size: 10,
     },
     {
         username: 'githubusername',
@@ -258,6 +272,8 @@ export let fakeQueryStringRes = [
         from: '',
         to: '',
         grid: true,
+        line_width: 4,
+        point_size: 10,
     },
     {
         username: 'githubusername',
@@ -279,6 +295,8 @@ export let fakeQueryStringRes = [
         from: '',
         to: '',
         grid: true,
+        line_width: 4,
+        point_size: 10,
     },
     {
         username: 'githubusername',
@@ -299,6 +317,8 @@ export let fakeQueryStringRes = [
         from: '',
         to: '',
         grid: true,
+        line_width: 4,
+        point_size: 10,
     },
 ];
 
