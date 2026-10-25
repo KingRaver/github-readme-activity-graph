@@ -1,5 +1,6 @@
 import { createGraph } from './createChart';
 import { graphSvg } from './svgs';
+import { DEFAULT_LINE_WIDTH, DEFAULT_POINT_SIZE } from './styles/graphStyle';
 import { Colors, ContributionDay } from './interfaces/interface';
 
 export class Card {
@@ -11,6 +12,8 @@ export class Card {
         private readonly title = '',
         private readonly area = false,
         private readonly showGrid = true,
+        private readonly lineWidth = DEFAULT_LINE_WIDTH,
+        private readonly pointSize = DEFAULT_POINT_SIZE,
     ) {}
 
     private getOptions() {
@@ -79,6 +82,8 @@ export class Card {
             title: this.title,
             radius: this.radius,
             line,
+            lineWidth: this.lineWidth,
+            pointSize: this.pointSize,
         };
 
         return graphSvg(args);

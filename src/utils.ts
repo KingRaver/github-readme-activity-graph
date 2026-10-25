@@ -3,6 +3,7 @@ import { Response } from 'express';
 import { Card } from './GraphCards';
 import { invalidUserSvg } from './svgs';
 import { selectColors } from './styles/themes';
+import { DEFAULT_LINE_WIDTH, DEFAULT_POINT_SIZE } from './styles/graphStyle';
 import { QueryOption, ParsedQs, UserDetails } from './interfaces/interface';
 
 export class Utilities {
@@ -38,6 +39,13 @@ export class Utilities {
                 ? this.queryString.point
                 : selectColors(theme).pointColor,
         };
+    }
+
+    // Finite number clamped to [min, max]; anything else falls back to the default
+    private clampNumber(value: string | undefined, min: number, max: number, fallback: number) {
+        if (value === undefined || value === '') return fallback;
+        const n = Number(value);
+        return Number.isFinite(n) ? Math.min(Math.max(n, min), max) : fallback;
     }
 
     private validateDays(days?: string): number {
@@ -121,6 +129,9 @@ export class Utilities {
                 : 420, // Custom height implementation from range [200, 600], if not specified use default value - 420
             days: isFromValid && isToValid ? days : this.validateDays(this.queryString.days),
             grid: this.queryString.grid === 'false' ? false : true,
+            // Line thickness in range [1, 10], point diameter in range [1, 30]
+            line_width: this.clampNumber(this.queryString.line_width, 1, 10, DEFAULT_LINE_WIDTH),
+            point_size: this.clampNumber(this.queryString.point_size, 1, 30, DEFAULT_POINT_SIZE),
             from,
             to,
         };
@@ -154,6 +165,8 @@ export class Utilities {
                 title,
                 options.area,
                 options.grid,
+                options.line_width,
+                options.point_size,
             );
             const getChart = await graph.buildGraph(fetchCalendarData.contributions);
             return {

@@ -27,6 +27,8 @@ export class QueryOption {
     radius: number;
     height: number;
     days: number;
+    line_width: number;
+    point_size: number;
 }
 
 export class ParsedQs {
@@ -49,6 +51,8 @@ export class ParsedQs {
     from?: string;
     to?: string;
     grid?: string;
+    line_width?: string;
+    point_size?: string;
 }
 
 export class GraphArgs {
@@ -58,6 +62,8 @@ export class GraphArgs {
     title: string;
     radius: number;
     line: Promise<string>;
+    lineWidth?: number;
+    pointSize?: number;
 }
 
 export class UserDetails {
