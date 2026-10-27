@@ -1,7 +1,17 @@
 import axios, { AxiosResponse } from 'axios';
 import * as dotenv from 'dotenv';
 import moment from 'moment';
-import { Query, UserDetails, Week, ContributionDay, ResponseOfApi } from 'src/interfaces/interface';
+import {
+    Query,
+    UserDetails,
+    Week,
+    ContributionDay,
+    ResponseOfApi,
+    StreakData,
+    CreatedAtApiResponse,
+    StreakQueryResponse,
+} from 'src/interfaces/interface';
+import { calculateStreaks } from './utils';
 
 dotenv.config();
 
@@ -57,7 +67,67 @@ export class Fetcher {
         };
     }
 
-    private async fetch(graphQLQuery: Query): Promise<AxiosResponse<ResponseOfApi>> {
+    private getCreatedAtQuery() {
+        return {
+            query: `
+              query userCreatedAt($LOGIN: String!) {
+                user(login: $LOGIN) {
+                  name
+                  createdAt
+                }
+              }
+            `,
+            variables: { LOGIN: this.username },
+        };
+    }
+
+    // One aliased sub-query per calendar year, each with its own $FROM_<year>/$TO_<year> -
+    // GitHub's contributionsCollection only accepts windows up to a year, so this is the
+    // one-request way to cover every year since the account was created.
+    private getYearlyStreakQuery(years: number[]) {
+        const currentYear = moment.utc().year();
+
+        const yearBlocks = years
+            .map(
+                (year) => `
+                year${year}: user(login: $LOGIN) {
+                  contributionsCollection(from: $FROM_${year}, to: $TO_${year}) {
+                    contributionCalendar {
+                      weeks {
+                        contributionDays {
+                          contributionCount
+                          date
+                        }
+                      }
+                    }
+                  }
+                }`,
+            )
+            .join('');
+
+        const variableDeclarations = years
+            .map((year) => `, $FROM_${year}: DateTime!, $TO_${year}: DateTime!`)
+            .join('');
+
+        const variables: { LOGIN: string; [key: string]: string } = { LOGIN: this.username };
+        years.forEach((year) => {
+            variables[`FROM_${year}`] = moment.utc(`${year}-01-01`).startOf('day').toISOString();
+            variables[`TO_${year}`] =
+                year === currentYear
+                    ? moment.utc().add(1, 'days').toISOString()
+                    : moment.utc(`${year}-12-31`).endOf('day').toISOString();
+        });
+
+        return {
+            query: `
+              query userStreak($LOGIN: String!${variableDeclarations}) {${yearBlocks}
+              }
+            `,
+            variables,
+        };
+    }
+
+    private async fetch<T = ResponseOfApi>(graphQLQuery: Query): Promise<AxiosResponse<T>> {
         return axios({
             url: 'https://api.github.com/graphql',
             method: 'POST',
@@ -169,6 +239,65 @@ export class Fetcher {
                 console.error('Unexpected API response structure');
                 throw new Error('Unexpected API response structure');
             }
+        } catch (error) {
+            console.log('error: ', error);
+            return `Can't fetch any contribution. Please check your username 😬`;
+        }
+    }
+
+    public async fetchStreakData(): Promise<StreakData | string> {
+        try {
+            const createdAtResponse = await this.fetch<CreatedAtApiResponse>(
+                this.getCreatedAtQuery(),
+            );
+
+            if (createdAtResponse.data.errors) {
+                console.error('API Error: ', createdAtResponse.data.errors);
+                return `Can't fetch any contribution. Please check your username 😬`;
+            }
+
+            const user = createdAtResponse.data.data?.user;
+            if (!user) {
+                return `Can't fetch any contribution. Please check your username 😬`;
+            }
+
+            const startYear = moment.utc(user.createdAt).year();
+            const endYear = moment.utc().year();
+            const years: number[] = [];
+            for (let year = startYear; year <= endYear; year++) years.push(year);
+
+            const streakResponse = await this.fetch<StreakQueryResponse>(
+                this.getYearlyStreakQuery(years),
+            );
+
+            if (streakResponse.data.errors) {
+                console.error('API Error: ', streakResponse.data.errors);
+                return `Can't fetch any contribution. Please check your username 😬`;
+            }
+
+            const yearlyData = streakResponse.data.data;
+            if (!yearlyData) {
+                return `Can't fetch any contribution. Please check your username 😬`;
+            }
+
+            // Flatten every year's weeks, in year order, into one chronological run of days.
+            const allDays: ContributionDay[] = [];
+            years.forEach((year) => {
+                const weeks =
+                    yearlyData[`year${year}`].contributionsCollection.contributionCalendar.weeks;
+                weeks.map((week: Week) =>
+                    week.contributionDays.map((day: ContributionDay) => allDays.push(day)),
+                );
+            });
+
+            const { currentStreak, longestStreak, totalContributions } = calculateStreaks(allDays);
+
+            return {
+                name: user.name,
+                currentStreak,
+                longestStreak,
+                totalContributions,
+            };
         } catch (error) {
             console.log('error: ', error);
             return `Can't fetch any contribution. Please check your username 😬`;

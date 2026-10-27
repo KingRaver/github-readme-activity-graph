@@ -13,6 +13,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   year earlier (`compare=year`, fetched via an aliased query in the same request), and a 7-day
   moving average trend line (`trend=true`).
 - Optional `line_width` and `point_size` query params for customizing the graph line and point styling.
+- `GET /streak`: a card showing current streak, longest streak and all-time total contributions,
+  computed from the full contribution history (one GraphQL request per account, aliased by year,
+  from account creation through the current year). Reuses the existing theme and color params.
 
 ### Changed
 

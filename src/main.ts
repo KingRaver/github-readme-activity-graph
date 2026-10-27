@@ -14,6 +14,8 @@ app.get('/', handlers.getRoot);
 //Get Graph
 app.get('/graph', handlers.getGraph);
 
+app.get('/streak', handlers.getStreak);
+
 app.get('/data', handlers.getData);
 
 app.listen(port, (): void => {

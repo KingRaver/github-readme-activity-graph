@@ -90,6 +90,47 @@ export class Week {
     contributionDays: Array<ContributionDay>;
 }
 
+export class StreakArgs {
+    height: number;
+    width: number;
+    colors: Colors;
+    title: string;
+    radius: number;
+    currentStreak: number;
+    longestStreak: number;
+    totalContributions: number;
+}
+
+export class StreakData {
+    name: string;
+    currentStreak: number;
+    longestStreak: number;
+    totalContributions: number;
+}
+
+export interface YearlyContribution {
+    contributionsCollection: {
+        contributionCalendar: {
+            weeks: Array<Week>;
+        };
+    };
+}
+
+export class StreakQueryResponse {
+    data?: Record<string, YearlyContribution>;
+    errors?: Array<{ message: string; type: string }>;
+}
+
+export class CreatedAtApiResponse {
+    data?: {
+        user: {
+            name: string;
+            createdAt: string;
+        } | null;
+    };
+    errors?: Array<{ message: string; type: string }>;
+}
+
 export class ResponseOfApi {
     data?: {
         user: {
