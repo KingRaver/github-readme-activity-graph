@@ -80,9 +80,8 @@ Branch: `feat/private-contributions`
 > paginated per-commit, per-PR lists, which cost far more API quota. The label is the planned
 > version; per-day shading is out of scope unless its cost is measured first.
 
-> **Decision required:** offer Phase 2 and 3 features upstream to
-> `Ashutosh00710/github-readme-activity-graph`, or keep them fork-only? Proceeding fork-only
-> unless told otherwise.
+> **Decided:** keep Phase 2 and 3 features fork-only. Not offering them upstream to
+> `Ashutosh00710/github-readme-activity-graph`.
 
 ---
 
@@ -191,5 +190,5 @@ Repo: `KingRaver/KingRaver`
 - [ ] Add a scheduled Substack "latest posts" workflow (`gautamkrishnar/blog-post-workflow`)
       next to the snake workflow
 
-> **Decision required:** add uptime or usage badges for Veritus and Voucher.Social? Only with
-> aggregate numbers the operators approve.
+> **Deferred:** uptime or usage badges for Veritus and Voucher.Social. Only with aggregate
+> numbers the operators approve — not blocking the rest of Phase 6.
