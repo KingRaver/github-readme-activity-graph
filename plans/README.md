@@ -157,9 +157,23 @@ Repo: `KingRaver/github-readme-stats`
 Branch: `feat/stats-proxy`
 **Depends on:** Phase 4
 
-- [ ] Add proxy routes to `vercel.json` for `/stats` and `/top-langs`, pointing at the stats
+- [x] Add proxy routes to `vercel.json` for `/stats` and `/top-langs`, pointing at the stats
       project and placed before the `/(.*)` catch-all
+      _2026-10-27: both routes point at `github-readme-stats-psi-lyart.vercel.app`, the stats
+      project's stable production domain (from the Vercel API's `list_project_domains`, not
+      the per-deployment hash URL). Checked first whether the project's
+      `ssoProtection: "all_except_custom_domains"` setting would block a server-side proxy
+      hitting a `.vercel.app` domain — it doesn't: `curl` against
+      `/api?username=KingRaver` and `/api/top-langs?username=KingRaver` on that domain both
+      returned `200` with the right content type, confirming the setting only gates
+      per-deployment preview URLs, not the stable production alias. `npm run build`,
+      `npm run lint` and `npm test` all pass (37 tests)._
 - [ ] Smoke-test both proxied routes on a preview deployment
+      _Blocked: `feat/stats-proxy` hasn't been pushed, so no preview deployment exists yet to
+      test the rewrite itself end-to-end. What's confirmed so far is only that the stats
+      project's own production endpoints respond correctly (see above) — not that this
+      project's `vercel.json` rewrite reaches them. Smoke-test `/stats` and `/top-langs` on
+      this repo's own preview URL once `/ship` pushes the branch and opens the PR._
 
 > **Decided:** keep the `vercel.app` URLs. No custom domain purchase for this project.
 

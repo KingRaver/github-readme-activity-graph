@@ -16,6 +16,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - `GET /streak`: a card showing current streak, longest streak and all-time total contributions,
   computed from the full contribution history (one GraphQL request per account, aliased by year,
   from account creation through the current year). Reuses the existing theme and color params.
+- `/stats` and `/top-langs` routes in `vercel.json`, proxying to the self-hosted
+  `github-readme-stats` fork so both cards are served from this project's base URL.
 
 ### Changed
 
