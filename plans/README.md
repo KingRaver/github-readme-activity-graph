@@ -80,9 +80,8 @@ Branch: `feat/private-contributions`
 > paginated per-commit, per-PR lists, which cost far more API quota. The label is the planned
 > version; per-day shading is out of scope unless its cost is measured first.
 
-> **Decision required:** offer Phase 2 and 3 features upstream to
-> `Ashutosh00710/github-readme-activity-graph`, or keep them fork-only? Proceeding fork-only
-> unless told otherwise.
+> **Decided:** keep Phase 2 and 3 features fork-only. Not offering them upstream to
+> `Ashutosh00710/github-readme-activity-graph`.
 
 ---
 
@@ -121,9 +120,8 @@ Branch: `feat/streak-card`
       haven't been smoke-tested against the live API locally, since no `TOKEN` is set in this
       environment._
 
-> **Decision required:** keep a separate streak card on the profile, or drop it and let the
-> graph carry that story? Building the endpoint either way; the profile choice is made in
-> Phase 6.
+> **Decided:** keep a separate streak card on the profile, using the new self-hosted `/streak`
+> endpoint. Wired up in Phase 6.
 
 ---
 
@@ -187,10 +185,10 @@ Repo: `KingRaver/KingRaver`
 
 - [ ] Point every card at the new base URL
 - [ ] Move the typing SVG from `readme-typing-svg.herokuapp.com` to `readme-typing-svg.demolab.com`
-- [ ] Replace the third-party streak card (`github-readme-streak-stats-eight.vercel.app`) per the
-      Phase 3 decision
+- [ ] Replace the third-party streak card (`github-readme-streak-stats-eight.vercel.app`) with
+      the self-hosted `/streak` endpoint, per the Phase 3 decision
 - [ ] Add a scheduled Substack "latest posts" workflow (`gautamkrishnar/blog-post-workflow`)
       next to the snake workflow
 
-> **Decision required:** add uptime or usage badges for Veritus and Voucher.Social? Only with
-> aggregate numbers the operators approve.
+> **Deferred:** uptime or usage badges for Veritus and Voucher.Social. Only with aggregate
+> numbers the operators approve — not blocking the rest of Phase 6.
