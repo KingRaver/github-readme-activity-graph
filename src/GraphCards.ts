@@ -1,7 +1,7 @@
 import { createGraph } from './createChart';
 import { graphSvg } from './svgs';
-import { DEFAULT_LINE_WIDTH, DEFAULT_POINT_SIZE } from './styles/graphStyle';
-import { Colors, ContributionDay } from './interfaces/interface';
+import { DEFAULT_LINE_WIDTH, DEFAULT_POINT_SIZE, overlaySeriesStyle } from './styles/graphStyle';
+import { Colors, ContributionDay, GraphArgs } from './interfaces/interface';
 
 export class Card {
     constructor(
@@ -14,6 +14,12 @@ export class Card {
         private readonly showGrid = true,
         private readonly lineWidth = DEFAULT_LINE_WIDTH,
         private readonly pointSize = DEFAULT_POINT_SIZE,
+        // Same window, one year earlier (compare=year) - rendered as a secondary "ghost" line
+        private readonly ghostContributions?: ContributionDay[],
+        // 7-day moving average (trend=true), aligned day-for-day with `days`
+        private readonly trendValues?: number[],
+        // "+N private" label (show_private=true)
+        private readonly privateLabel?: string,
     ) {}
 
     private getOptions() {
@@ -46,6 +52,11 @@ export class Card {
             },
             showArea: this.area,
             fullWidth: true,
+            // the ghost/trend lines never show points or an area fill, regardless of `area`
+            series: {
+                ghost: { showPoint: false, showArea: false },
+                trend: { showPoint: false, showArea: false },
+            },
         };
     }
 
@@ -68,14 +79,30 @@ export class Card {
         //Options to pass in createGraph function
         const options = this.getOptions();
 
+        const series: Array<{ value: number[]; name?: string; className?: string }> = [
+            { value: days.map((day) => day.contributionCount) },
+        ];
+        const hasGhost = !!this.ghostContributions?.length;
+        const hasTrend = !!this.trendValues?.length;
+        if (hasGhost) {
+            series.push({
+                value: this.ghostContributions!.map((day) => day.contributionCount),
+                name: 'ghost',
+                className: 'ct-series-ghost',
+            });
+        }
+        if (hasTrend) {
+            series.push({ value: this.trendValues!, name: 'trend', className: 'ct-series-trend' });
+        }
+
         //Construction of graph from node-chartist
         const line: Promise<string> = await createGraph('line', options, {
             labels: days.map((day) => day.date),
-            series: [{ value: days.map((day) => day.contributionCount) }],
+            series,
         });
 
         //Arguments to construct graphs with rect and other options
-        const args = {
+        const args: GraphArgs = {
             height: this.height,
             width: this.width,
             colors: this.colors,
@@ -85,6 +112,12 @@ export class Card {
             lineWidth: this.lineWidth,
             pointSize: this.pointSize,
         };
+        if (hasGhost || hasTrend) {
+            args.extraStyle = overlaySeriesStyle(this.colors.lineColor);
+        }
+        if (this.privateLabel) {
+            args.privateLabel = this.privateLabel;
+        }
 
         return graphSvg(args);
     }

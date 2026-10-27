@@ -29,6 +29,9 @@ export class QueryOption {
     days: number;
     line_width: number;
     point_size: number;
+    show_private: boolean;
+    compare: boolean;
+    trend: boolean;
 }
 
 export class ParsedQs {
@@ -53,6 +56,9 @@ export class ParsedQs {
     grid?: string;
     line_width?: string;
     point_size?: string;
+    show_private?: string;
+    compare?: string;
+    trend?: string;
 }
 
 export class GraphArgs {
@@ -64,11 +70,15 @@ export class GraphArgs {
     line: Promise<string>;
     lineWidth?: number;
     pointSize?: number;
+    extraStyle?: string;
+    privateLabel?: string;
 }
 
 export class UserDetails {
     contributions: Array<ContributionDay>;
     name: string;
+    restrictedContributionsCount?: number;
+    previousYearContributions?: Array<ContributionDay>;
 }
 
 export class ContributionDay {
@@ -85,8 +95,16 @@ export class ResponseOfApi {
         user: {
             name: string;
             contributionsCollection: {
+                restrictedContributionsCount?: number;
                 contributionCalendar: {
                     totalContributions: number;
+                    weeks: Array<Week>;
+                };
+            };
+        };
+        userPrevious?: {
+            contributionsCollection: {
+                contributionCalendar: {
                     weeks: Array<Week>;
                 };
             };
