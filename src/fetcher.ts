@@ -11,13 +11,12 @@ export class Fetcher {
         this.username = username;
     }
 
-    private getGraphQLQuery(from: string, to: string) {
-        return {
-            query: `
-              query userInfo($LOGIN: String!, $FROM: DateTime!, $TO: DateTime!) {
-                user(login: $LOGIN) {
-                  name
-                  contributionsCollection(from: $FROM, to: $TO) {
+    private getGraphQLQuery(from: string, to: string, previous?: { from: string; to: string }) {
+        const previousYearParams = previous ? ', $FROM_PREV: DateTime!, $TO_PREV: DateTime!' : '';
+        const previousYearBlock = previous
+            ? `
+                userPrevious: user(login: $LOGIN) {
+                  contributionsCollection(from: $FROM_PREV, to: $TO_PREV) {
                     contributionCalendar {
                       weeks {
                         contributionDays {
@@ -27,13 +26,33 @@ export class Fetcher {
                       }
                     }
                   }
-                }
+                }`
+            : '';
+
+        return {
+            query: `
+              query userInfo($LOGIN: String!, $FROM: DateTime!, $TO: DateTime!${previousYearParams}) {
+                user(login: $LOGIN) {
+                  name
+                  contributionsCollection(from: $FROM, to: $TO) {
+                    restrictedContributionsCount
+                    contributionCalendar {
+                      weeks {
+                        contributionDays {
+                          contributionCount
+                          date
+                        }
+                      }
+                    }
+                  }
+                }${previousYearBlock}
               }
             `,
             variables: {
                 LOGIN: this.username,
                 FROM: from,
                 TO: to,
+                ...(previous ? { FROM_PREV: previous.from, TO_PREV: previous.to } : {}),
             },
         };
     }
@@ -53,6 +72,7 @@ export class Fetcher {
         days: number,
         customFromDate?: string,
         customToDate?: string,
+        compareYear?: boolean,
     ): Promise<UserDetails | string> {
         let from = '',
             to = '';
@@ -66,8 +86,16 @@ export class Fetcher {
             to = moment(now).add(1, 'days').utc().toISOString();
         }
 
+        // Same window, one year earlier, fetched via an aliased query in the same request
+        const previous = compareYear
+            ? {
+                  from: moment(from).subtract(1, 'year').toISOString(),
+                  to: moment(to).subtract(1, 'year').toISOString(),
+              }
+            : undefined;
+
         try {
-            const apiResponse = await this.fetch(this.getGraphQLQuery(from, to));
+            const apiResponse = await this.fetch(this.getGraphQLQuery(from, to, previous));
 
             if (apiResponse.data.errors) {
                 console.error('API Error: ', apiResponse.data.errors);
@@ -84,6 +112,9 @@ export class Fetcher {
                     const userData: UserDetails = {
                         contributions: [],
                         name: apiResponse.data.data.user.name,
+                        restrictedContributionsCount:
+                            apiResponse.data.data.user.contributionsCollection
+                                .restrictedContributionsCount,
                     };
                     //filtering the week data from API response
                     const weeks =
@@ -110,6 +141,28 @@ export class Fetcher {
                         const extra = userData.contributions.length - days;
                         userData.contributions.splice(0, extra);
                     }
+
+                    if (previous && apiResponse.data.data.userPrevious) {
+                        const previousYearContributions: ContributionDay[] = [];
+                        apiResponse.data.data.userPrevious.contributionsCollection.contributionCalendar.weeks.map(
+                            (week: Week) =>
+                                week.contributionDays.map((contributionDay: ContributionDay) => {
+                                    contributionDay.date = moment(
+                                        contributionDay.date,
+                                        moment.ISO_8601,
+                                    )
+                                        .date()
+                                        .toString();
+                                    previousYearContributions.push(contributionDay);
+                                }),
+                        );
+                        // align the ghost line's length to the current window's
+                        const extra =
+                            previousYearContributions.length - userData.contributions.length;
+                        if (extra > 0) previousYearContributions.splice(0, extra);
+                        userData.previousYearContributions = previousYearContributions;
+                    }
+
                     return userData;
                 }
             } else {

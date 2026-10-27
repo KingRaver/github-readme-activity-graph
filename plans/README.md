@@ -51,13 +51,29 @@ merged to `main` in PR #1.
 Branch: `feat/private-contributions`
 **Depends on:** Phase 0
 
-- [ ] Fetch `restrictedContributionsCount` in the existing query
-- [ ] Opt-in "+N private" label for the selected window (`show_private=true`)
-- [ ] Opt-in year-over-year ghost line (`compare=year`): the same window from last year, fetched
+- [x] Fetch `restrictedContributionsCount` in the existing query
+- [x] Opt-in "+N private" label for the selected window (`show_private=true`)
+- [x] Opt-in year-over-year ghost line (`compare=year`): the same window from last year, fetched
       in the same request as an aliased query
-- [ ] Optional 7-day moving average (`trend=true`)
-- [ ] Tests in `__test__/` for each new option
-- [ ] README Customization rows for each new option
+      _2026-10-27: adds a `userPrevious: user(...)` alias plus `$FROM_PREV`/`$TO_PREV` variables
+      only when `compare=year`. The fetched previous-year days are trimmed to the same length as
+      the current window and rendered as a dashed, point-less "ghost" line
+      (`.ct-series-ghost`)._
+- [x] Optional 7-day moving average (`trend=true`)
+      _Trailing average (`movingAverage` in `src/utils.ts`), partial window for the first 6 days;
+      rendered as a dotted, point-less "trend" line (`.ct-series-trend`)._
+- [x] Tests in `__test__/` for each new option
+      _New `__test__/activityGraphFeatures.test.ts`: query-option parsing, `movingAverage`, the
+      aliased GraphQL query shape, `Fetcher.fetchContributions` parsing of
+      `restrictedContributionsCount`/`previousYearContributions`, and `Card.buildGraph` rendering
+      (and correctly omitting) the overlay series and private label._
+- [x] README Customization rows for each new option
+      _2026-10-27: `npm run build`, `npm run lint` and `npm test` all pass (28 tests; the one
+      pre-existing failure is the live-API test in `__test__/utils.test.ts`, which needs a
+      `TOKEN` — same documented gap as Phase 0, unrelated to this phase). The
+      `restrictedContributionsCount` field name and the aliased-query syntax follow GitHub's
+      GraphQL schema but haven't been smoke-tested against the live API locally, since no
+      `TOKEN` is set in this environment._
 
 > **Note:** GitHub reports private contributions only as a total for the window. The daily counts
 > already include them, unlabelled. A shaded per-day public/private split would need the

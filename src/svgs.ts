@@ -36,7 +36,7 @@ export const graphSvg = (props: GraphArgs) => `
                     props.colors.areaColor,
                     props.lineWidth,
                     props.pointSize,
-                )}
+                )}${props.extraStyle ?? ''}
                 ${pointAnimation()}
                 ${lineAnimation()}
             </style>
@@ -45,7 +45,12 @@ export const graphSvg = (props: GraphArgs) => `
                 <h1 xmlns="http://www.w3.org/1999/xhtml" class="header">
                     ${props.title}
                 </h1>
-            </foreignObject>
+            </foreignObject>${
+                props.privateLabel
+                    ? `
+            <text x="${props.width - 20}" y="20" text-anchor="end" data-testid="private_label" style="fill:#${props.colors.titleColor ?? props.colors.color}; opacity:.7; font-size:12px;">${props.privateLabel}</text>`
+                    : ''
+            }
             ${props.line}
     </svg>
 `;

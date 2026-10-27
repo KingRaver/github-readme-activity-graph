@@ -6,6 +6,13 @@ import { selectColors } from './styles/themes';
 import { DEFAULT_LINE_WIDTH, DEFAULT_POINT_SIZE } from './styles/graphStyle';
 import { QueryOption, ParsedQs, UserDetails } from './interfaces/interface';
 
+// Trailing N-day average; the window is partial for the first N-1 entries.
+export const movingAverage = (values: number[], window = 7): number[] =>
+    values.map((_, index) => {
+        const slice = values.slice(Math.max(0, index - window + 1), index + 1);
+        return slice.reduce((sum, value) => sum + value, 0) / slice.length;
+    });
+
 export class Utilities {
     public username: string;
     constructor(private readonly queryString: ParsedQs) {
@@ -132,6 +139,9 @@ export class Utilities {
             // Line thickness in range [1, 10], point diameter in range [1, 30]
             line_width: this.clampNumber(this.queryString.line_width, 1, 10, DEFAULT_LINE_WIDTH),
             point_size: this.clampNumber(this.queryString.point_size, 1, 30, DEFAULT_POINT_SIZE),
+            show_private: String(this.queryString.show_private) === 'true',
+            compare: String(this.queryString.compare) === 'year',
+            trend: String(this.queryString.trend) === 'true',
             from,
             to,
         };
@@ -157,6 +167,15 @@ export class Utilities {
                 }
             }
 
+            const trendValues = options.trend
+                ? movingAverage(fetchCalendarData.contributions.map((day) => day.contributionCount))
+                : undefined;
+
+            const privateLabel =
+                options.show_private && fetchCalendarData.restrictedContributionsCount
+                    ? `+${fetchCalendarData.restrictedContributionsCount} private`
+                    : undefined;
+
             const graph = new Card(
                 options.height,
                 1200,
@@ -167,6 +186,9 @@ export class Utilities {
                 options.grid,
                 options.line_width,
                 options.point_size,
+                options.compare ? fetchCalendarData.previousYearContributions : undefined,
+                trendValues,
+                privateLabel,
             );
             const getChart = await graph.buildGraph(fetchCalendarData.contributions);
             return {

@@ -108,6 +108,9 @@ Customize the appearance of your Activity Graph however you want with URL params
 |     `grid`     |                   show grid                   |           boolean (default: `true`)            |
 |  `line_width`  |        thickness of the graph's line          |       number (1-10 inclusive, default: `4`)    |
 |  `point_size`  |     diameter of points on the line graph      |      number (1-30 inclusive, default: `10`)    |
+| `show_private` |  adds a "+N private" label for restricted contributions in the window  |  boolean (default: `false`)  |
+|   `compare`    |  overlays a ghost line for the same window one year earlier  |  string (`year`)  |
+|     `trend`    |       overlays a 7-day moving average line        |           boolean (default: `false`)           |
 
 ⚠ **For `custom_title` please make sure that you are using %20 for spaces**
 

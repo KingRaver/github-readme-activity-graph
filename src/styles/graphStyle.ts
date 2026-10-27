@@ -121,6 +121,26 @@ export const graphStyle = (
     }
     `;
 
+// Styling for the optional year-over-year ghost line (compare=year) and
+// 7-day moving average trend line (trend=true); both skip points/area so they
+// stay visually secondary to the main contribution line.
+export const overlaySeriesStyle = (lineColor: string) =>
+    `
+    .ct-series-ghost .ct-line {
+      stroke: #${lineColor};
+      stroke-dasharray: 6px, 4px;
+      opacity: 0.35;
+      animation: none;
+    }
+
+    .ct-series-trend .ct-line {
+      stroke: #${lineColor};
+      stroke-dasharray: 2px, 3px;
+      opacity: 0.6;
+      animation: none;
+    }
+    `;
+
 /** Unused style for dates feature #85 */
 export const diagonalTiltStyle = () => {
     return `

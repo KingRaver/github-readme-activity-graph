@@ -120,6 +120,9 @@ export let fakeQueryStringRes = [
         grid: true,
         line_width: 4,
         point_size: 10,
+        show_private: false,
+        compare: false,
+        trend: false,
     },
     {
         username: 'githubusername',
@@ -142,6 +145,9 @@ export let fakeQueryStringRes = [
         grid: true,
         line_width: 4,
         point_size: 10,
+        show_private: false,
+        compare: false,
+        trend: false,
     },
     {
         username: 'githubusername',
@@ -164,6 +170,9 @@ export let fakeQueryStringRes = [
         grid: true,
         line_width: 4,
         point_size: 10,
+        show_private: false,
+        compare: false,
+        trend: false,
     },
     {
         username: 'githubusername',
@@ -186,6 +195,9 @@ export let fakeQueryStringRes = [
         grid: true,
         line_width: 4,
         point_size: 10,
+        show_private: false,
+        compare: false,
+        trend: false,
     },
     {
         username: 'githubusername',
@@ -208,6 +220,9 @@ export let fakeQueryStringRes = [
         grid: true,
         line_width: 4,
         point_size: 10,
+        show_private: false,
+        compare: false,
+        trend: false,
     },
     {
         username: 'githubusername',
@@ -230,6 +245,9 @@ export let fakeQueryStringRes = [
         grid: true,
         line_width: 4,
         point_size: 10,
+        show_private: false,
+        compare: false,
+        trend: false,
     },
     {
         username: 'githubusername',
@@ -252,6 +270,9 @@ export let fakeQueryStringRes = [
         grid: true,
         line_width: 4,
         point_size: 10,
+        show_private: false,
+        compare: false,
+        trend: false,
     },
     {
         username: 'githubusername',
@@ -274,6 +295,9 @@ export let fakeQueryStringRes = [
         grid: true,
         line_width: 4,
         point_size: 10,
+        show_private: false,
+        compare: false,
+        trend: false,
     },
     {
         username: 'githubusername',
@@ -297,6 +321,9 @@ export let fakeQueryStringRes = [
         grid: true,
         line_width: 4,
         point_size: 10,
+        show_private: false,
+        compare: false,
+        trend: false,
     },
     {
         username: 'githubusername',
@@ -319,6 +346,9 @@ export let fakeQueryStringRes = [
         grid: true,
         line_width: 4,
         point_size: 10,
+        show_private: false,
+        compare: false,
+        trend: false,
     },
 ];
 
@@ -363,6 +393,7 @@ export const expectedQuery = (username: string, from: string, to: string) => {
                 user(login: $LOGIN) {
                   name
                   contributionsCollection(from: $FROM, to: $TO) {
+                    restrictedContributionsCount
                     contributionCalendar {
                       weeks {
                         contributionDays {
