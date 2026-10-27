@@ -143,9 +143,12 @@ Repo: `KingRaver/github-readme-stats`
       Jeff). Note: the token was added after that production deployment was built — Vercel
       only applies new/changed env vars to deployments created after the change, so a redeploy
       may be needed before the card actually has access to it._
-- [ ] Confirm the commit count is above the shared instance's 987
-- [ ] Accept that top-languages counts public repos only. Including private repos would mean
+- [x] Confirm the commit count is above the shared instance's 987
+      _2026-10-27: self-hosted stats card shows 991 total commits (last year), above the shared
+      instance's 987 — confirms private contributions are counting now that `TOKEN` is applied._
+- [x] Accept that top-languages counts public repos only. Including private repos would mean
       giving the token access to their code.
+      _2026-10-27: accepted — staying public-repos-only for top-languages._
 
 ---
 
