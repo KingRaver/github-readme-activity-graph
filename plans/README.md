@@ -121,9 +121,8 @@ Branch: `feat/streak-card`
       haven't been smoke-tested against the live API locally, since no `TOKEN` is set in this
       environment._
 
-> **Decision required:** keep a separate streak card on the profile, or drop it and let the
-> graph carry that story? Building the endpoint either way; the profile choice is made in
-> Phase 6.
+> **Decided:** keep a separate streak card on the profile, using the new self-hosted `/streak`
+> endpoint. Wired up in Phase 6.
 
 ---
 
@@ -187,8 +186,8 @@ Repo: `KingRaver/KingRaver`
 
 - [ ] Point every card at the new base URL
 - [ ] Move the typing SVG from `readme-typing-svg.herokuapp.com` to `readme-typing-svg.demolab.com`
-- [ ] Replace the third-party streak card (`github-readme-streak-stats-eight.vercel.app`) per the
-      Phase 3 decision
+- [ ] Replace the third-party streak card (`github-readme-streak-stats-eight.vercel.app`) with
+      the self-hosted `/streak` endpoint, per the Phase 3 decision
 - [ ] Add a scheduled Substack "latest posts" workflow (`gautamkrishnar/blog-post-workflow`)
       next to the snake workflow
 
