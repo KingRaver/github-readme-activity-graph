@@ -168,12 +168,13 @@ Branch: `feat/stats-proxy`
       returned `200` with the right content type, confirming the setting only gates
       per-deployment preview URLs, not the stable production alias. `npm run build`,
       `npm run lint` and `npm test` all pass (37 tests)._
-- [ ] Smoke-test both proxied routes on a preview deployment
-      _Blocked: `feat/stats-proxy` hasn't been pushed, so no preview deployment exists yet to
-      test the rewrite itself end-to-end. What's confirmed so far is only that the stats
-      project's own production endpoints respond correctly (see above) — not that this
-      project's `vercel.json` rewrite reaches them. Smoke-test `/stats` and `/top-langs` on
-      this repo's own preview URL once `/ship` pushes the branch and opens the PR._
+- [x] Smoke-test both proxied routes on a preview deployment
+      _2026-10-27: PR #8 merged to `main`; the `rho-azure` production deployment picked it up
+      (`READY`, created right after the merge). `curl` against
+      `https://github-readme-activity-graph-rho-azure.vercel.app/stats?username=KingRaver` and
+      `/top-langs?username=KingRaver` both returned `200` with `content-type:
+      image/svg+xml`, and the bodies are real stats/top-langs SVG cards (not error cards) —
+      confirming the `vercel.json` rewrite reaches the stats project end-to-end._
 
 > **Decided:** keep the `vercel.app` URLs. No custom domain purchase for this project.
 
