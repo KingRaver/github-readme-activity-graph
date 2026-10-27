@@ -183,12 +183,36 @@ Branch: `feat/stats-proxy`
 Repo: `KingRaver/KingRaver`
 **Depends on:** Phases 2–5
 
-- [ ] Point every card at the new base URL
-- [ ] Move the typing SVG from `readme-typing-svg.herokuapp.com` to `readme-typing-svg.demolab.com`
-- [ ] Replace the third-party streak card (`github-readme-streak-stats-eight.vercel.app`) with
+- [x] Point every card at the new base URL
+      _2026-10-27: the stats and top-langs cards were still pointed at an older
+      `github-stats-extended.vercel.app` domain (not the Phase 4 self-hosted project). Both now
+      point at `/stats` and `/top-langs` on `github-readme-activity-graph-rho-azure.vercel.app`
+      — the Phase 5 proxy routes. The activity graph card was already on that base URL from
+      Phase 0. Smoke-tested all three live with the README's actual query params: `200`,
+      correct SVG bodies._
+- [x] Move the typing SVG from `readme-typing-svg.herokuapp.com` to `readme-typing-svg.demolab.com`
+      _2026-10-27: `herokuapp.com` still happened to respond, but swapped anyway per the plan.
+      `demolab.com` confirmed live: `200`, `image/svg+xml`, real rendered SVG with the same
+      query params._
+- [x] Replace the third-party streak card (`github-readme-streak-stats-eight.vercel.app`) with
       the self-hosted `/streak` endpoint, per the Phase 3 decision
-- [ ] Add a scheduled Substack "latest posts" workflow (`gautamkrishnar/blog-post-workflow`)
+      _2026-10-27: new URL is `/streak` on the same `rho-azure` base, themed to match the other
+      cards (`theme=tokyo-night`, `bg_color=0D1117`, `color=FFF01F`, `title_color=00F0FF`,
+      `hide_border=true`). `/streak` shares `queryOptions()` with the graph endpoint, so these
+      params resolve the same way. Smoke-tested live: `200`, correct SVG._
+- [x] Add a scheduled Substack "latest posts" workflow (`gautamkrishnar/blog-post-workflow`)
       next to the snake workflow
+      _2026-10-27: new `.github/workflows/blog-post-workflow.yml`, daily cron +
+      `workflow_dispatch`, pinned to `gautamkrishnar/blog-post-workflow@v1` (verified against
+      that repo's tags). Feed is `https://jeffspirlock.substack.com/feed` — resolved from the
+      `@neuralmosaic` Substack handle linked in the README's Connect section; that handle's
+      profile page links to `jeffspirlock.substack.com` ("Society Reimagined") as the actual
+      publication, confirmed live with real post items, whereas `neuralmosaic.substack.com`
+      itself just redirects back to the profile page. Added a `<!-- BLOG-POST-LIST:START/END
+      -->` section to the README for the action to fill. Verified: YAML is valid, the action
+      tag and `actions/checkout@v4` exist, and the feed is live with real items. Not yet
+      verified: the workflow actually running and writing posts into the README — that needs
+      a push to GitHub, which is `/ship`'s job._
 
 > **Deferred:** uptime or usage badges for Veritus and Voucher.Social. Only with aggregate
 > numbers the operators approve — not blocking the rest of Phase 6.
