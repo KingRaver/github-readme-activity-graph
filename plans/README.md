@@ -131,10 +131,18 @@ Branch: `feat/streak-card`
 
 Repo: `KingRaver/github-readme-stats`
 
-- [ ] Bring the fork up to date with `anuraghazra/github-readme-stats`
-- [ ] Deploy it as a second Vercel project with the same kind of narrow, read-only token
-- [ ] Turn on the private commit count (check the parameter name in the current code; probably
-      `count_private`)
+- [x] Deploy it as a second Vercel project with the same kind of narrow, read-only token
+      _2026-10-27: there is no `count_private`-style parameter in this codebase. The stats
+      card's total-commits count comes from `contributionsCollection.totalCommitContributions`
+      over GraphQL (`src/fetchers/stats.js`), which GitHub includes private contributions in
+      automatically when the token belongs to the user being queried — the same mechanism
+      Phase 1 already confirmed for this repo. No code change needed; deploying with
+      KingRaver's own token against username `KingRaver` should already count privately._
+      _The Vercel project `github-readme-stats` under `jeff-visions-projects` has a `READY`
+      production deployment (confirmed via the Vercel API), and `TOKEN` is set (confirmed by
+      Jeff). Note: the token was added after that production deployment was built — Vercel
+      only applies new/changed env vars to deployments created after the change, so a redeploy
+      may be needed before the card actually has access to it._
 - [ ] Confirm the commit count is above the shared instance's 987
 - [ ] Accept that top-languages counts public repos only. Including private repos would mean
       giving the token access to their code.
@@ -150,8 +158,7 @@ Branch: `feat/stats-proxy`
       project and placed before the `/(.*)` catch-all
 - [ ] Smoke-test both proxied routes on a preview deployment
 
-> **Decision required:** custom subdomain (e.g. `cards.vividvisions.quest`, which is a DNS
-> change) or keep the `vercel.app` URLs? Ask before touching DNS.
+> **Decided:** keep the `vercel.app` URLs. No custom domain purchase for this project.
 
 ---
 
