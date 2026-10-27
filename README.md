@@ -106,6 +106,8 @@ Customize the appearance of your Activity Graph however you want with URL params
 |     `from`     |       date from which the graph starts        |              format `YYYY-MM-DD`               |
 |      `to`      |         date where the graph will end         |              format `YYYY-MM-DD`               |
 |     `grid`     |                   show grid                   |           boolean (default: `true`)            |
+|  `line_width`  |        thickness of the graph's line          |       number (1-10 inclusive, default: `4`)    |
+|  `point_size`  |     diameter of points on the line graph      |      number (1-30 inclusive, default: `10`)    |
 
 ⚠ **For `custom_title` please make sure that you are using %20 for spaces**
 
