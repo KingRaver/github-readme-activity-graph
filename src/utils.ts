@@ -1,10 +1,17 @@
 import moment from 'moment';
 import { Response } from 'express';
 import { Card } from './GraphCards';
-import { invalidUserSvg } from './svgs';
+import { invalidUserSvg, streakSvg } from './svgs';
 import { selectColors } from './styles/themes';
 import { DEFAULT_LINE_WIDTH, DEFAULT_POINT_SIZE } from './styles/graphStyle';
-import { QueryOption, ParsedQs, UserDetails } from './interfaces/interface';
+import {
+    QueryOption,
+    ParsedQs,
+    UserDetails,
+    ContributionDay,
+    StreakArgs,
+    StreakData,
+} from './interfaces/interface';
 
 // Trailing N-day average; the window is partial for the first N-1 entries.
 export const movingAverage = (values: number[], window = 7): number[] =>
@@ -12,6 +19,33 @@ export const movingAverage = (values: number[], window = 7): number[] =>
         const slice = values.slice(Math.max(0, index - window + 1), index + 1);
         return slice.reduce((sum, value) => sum + value, 0) / slice.length;
     });
+
+// `days` must be one entry per calendar day, in chronological order, with no gaps -
+// exactly what GitHub's contributionCalendar returns for a given window.
+export const calculateStreaks = (days: ContributionDay[]) => {
+    const totalContributions = days.reduce((sum, day) => sum + day.contributionCount, 0);
+
+    let longestStreak = 0;
+    let running = 0;
+    for (const day of days) {
+        running = day.contributionCount > 0 ? running + 1 : 0;
+        longestStreak = Math.max(longestStreak, running);
+    }
+
+    // Walk backward from the most recent day. If that very last day has no
+    // contributions, it may simply not have happened yet - skip only that one day
+    // so an empty "today" doesn't zero out a streak that's still alive as of yesterday.
+    let currentStreak = 0;
+    let index = days.length - 1;
+    if (index >= 0 && days[index].contributionCount === 0) {
+        index--;
+    }
+    for (; index >= 0 && days[index].contributionCount > 0; index--) {
+        currentStreak++;
+    }
+
+    return { currentStreak, longestStreak, totalContributions };
+};
 
 export class Utilities {
     public username: string;
@@ -200,6 +234,44 @@ export class Utilities {
         } else {
             return {
                 finalGraph: invalidUserSvg(fetchCalendarData),
+                header: { maxAge: 'no-store, max-age=0' },
+            };
+        }
+    }
+
+    public async buildStreakCard(streakData: StreakData | string) {
+        if (typeof streakData === 'object') {
+            const options = this.queryOptions();
+            let title = '';
+
+            if (!options.hide_title) {
+                title = options.custom_title
+                    ? options.custom_title
+                    : `${
+                          streakData.name !== null ? streakData.name : options.username
+                      }'s Contribution Streak`;
+            }
+
+            const args: StreakArgs = {
+                height: 200,
+                width: 495,
+                colors: options.colors,
+                title,
+                radius: options.radius,
+                currentStreak: streakData.currentStreak,
+                longestStreak: streakData.longestStreak,
+                totalContributions: streakData.totalContributions,
+            };
+
+            return {
+                finalCard: streakSvg(args),
+                header: {
+                    maxAge: 'public, max-age=1800',
+                },
+            };
+        } else {
+            return {
+                finalCard: invalidUserSvg(streakData),
                 header: { maxAge: 'no-store, max-age=0' },
             };
         }

@@ -91,13 +91,35 @@ Branch: `feat/private-contributions`
 Branch: `feat/streak-card`
 **Depends on:** Phase 0
 
-- [ ] Fetch the contribution calendar for every year since the account was created (2021) in one
+- [x] Fetch the contribution calendar for every year since the account was created (2021) in one
       GraphQL request, using aliased yearly queries
-- [ ] Calculate the current streak, longest streak and all-time total
-- [ ] `GET /streak` renders an SVG card using the existing themes and colour params
-- [ ] Tests for the streak maths, including today having no contributions yet and gaps that
+      _2026-10-27: a cheap preliminary query fetches `user.createdAt` to determine the start
+      year (robust for any account, not just one created in 2021); the actual calendar data is
+      then one request with one aliased `year<N>: user(...) { contributionsCollection(...) }`
+      block per year from account creation through the current year._
+- [x] Calculate the current streak, longest streak and all-time total
+      _`calculateStreaks` in `src/utils.ts`: a trailing zero-contribution day (today, not over
+      yet) is skipped once so it doesn't zero out an otherwise-live streak; everything else
+      scans the merged, chronologically-ordered day list directly, so a gap or a continuation
+      at a year boundary falls out of the same logic with no special-casing._
+- [x] `GET /streak` renders an SVG card using the existing themes and colour params
+      _New `streakSvg` in `src/svgs.ts`, wired through `Utilities.buildStreakCard`,
+      `Handlers.getStreak` and the `/streak` route in `src/main.ts`. Reuses `queryOptions()`'s
+      theme/color/radius/title resolution; the three-column stat layout is fixed-size rather
+      than following the line graph's `height` param, since that range was sized for a chart._
+- [x] Tests for the streak maths, including today having no contributions yet and gaps that
       cross a year boundary
-- [ ] README section for `/streak`
+      _New `__test__/streak.test.ts`: `calculateStreaks` unit tests for today-incomplete,
+      a genuine break, a streak and a gap each crossing Dec31/Jan1, and an empty history;
+      `streakSvg` rendering checks; and `Fetcher.fetchStreakData` tests mocking the two-request
+      flow (createdAt, then the aliased yearly query) plus the invalid-username path._
+- [x] README section for `/streak`
+      _2026-10-27: `npm run build`, `npm run lint` and `npm test` all pass (37 tests; the one
+      pre-existing failure is the live-API test in `__test__/utils.test.ts`, which needs a
+      `TOKEN` - same documented gap as Phases 0 and 2, unrelated to this phase). The
+      `createdAt` field and the aliased multi-year query follow GitHub's GraphQL schema but
+      haven't been smoke-tested against the live API locally, since no `TOKEN` is set in this
+      environment._
 
 > **Decision required:** keep a separate streak card on the profile, or drop it and let the
 > graph carry that story? Building the endpoint either way; the profile choice is made in

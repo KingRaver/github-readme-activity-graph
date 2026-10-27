@@ -33,6 +33,24 @@ export class Handlers {
         }
     }
 
+    public async getStreak(req: Request, res: Response) {
+        try {
+            const utils = new Utilities(req.query);
+
+            const fetcher = new Fetcher(utils.username);
+            const streakData = await fetcher.fetchStreakData();
+
+            const { finalCard, header } = await utils.buildStreakCard(streakData);
+            utils.setHttpHeader(res, header.maxAge);
+
+            res.status(200).send(finalCard);
+        } catch {
+            res.setHeader('Cache-Control', 'no-store, max-age=0');
+            res.set('Content-Type', 'image/svg+xml');
+            res.send(invalidUserSvg('Something unexpected happened 💥'));
+        }
+    }
+
     public async getData(req: Request, res: Response) {
         try {
             const utils = new Utilities(req.query);

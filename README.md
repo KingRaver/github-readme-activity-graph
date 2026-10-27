@@ -27,6 +27,7 @@ Please refer to the updated link [here](#how-to-use)
 - [Available Themes](#available-themes)
 - [Customization](#customization)
     - [Common Options](#common-options)
+- [Streak Card](#streak-card)
 - [Deploy on your own Replit instance](#deploy-on-your-own-replit-instance)
     - [Follow the steps](#follow-the-steps)
 - [Deploy on your own Vercel instance](#deploy-on-your-own-vercel-instance)
@@ -127,6 +128,20 @@ Example:
 ```md
 [![Ashutosh's github activity graph](https://github-readme-activity-graph.vercel.app/graph?username=ashutosh00710&bg_color=fffff0&color=708090&line=24292e&point=24292e&area=true&border_color=ff0000)](https://github.com/ashutosh00710/github-readme-activity-graph)
 ```
+
+## Streak Card
+
+`/streak` renders a separate card with your current streak, longest streak and all-time total
+contributions, calculated from your full contribution history (every year since your account was
+created).
+
+```md
+[![Ashutosh's github contribution streak](https://github-readme-activity-graph.vercel.app/streak?username=Ashutosh00710)](https://github.com/ashutosh00710/github-readme-activity-graph)
+```
+
+It uses the same `theme`, `bg_color`, `border_color`, `color`, `title_color`, `radius`,
+`hide_title` and `custom_title` params as the activity graph above - see
+[Common Options](#common-options).
 
 ## Deploy on your own Replit instance
 
