@@ -12,11 +12,11 @@
 <h3 align="center"><a href="https://jb.gg/OpenSourceSupport">Supported by JetBrains</a></h3>
 A dynamically generated activity graph to show your GitHub activities of last 31 days.
 
-### ⚠️ NOTICE: DEPLOYMENT MOVED ⚠️
+### ⚠️ NOTICE: DEPLOY YOUR OWN INSTANCE ⚠️
 
-The canonical deployment is now `https://github-readme-activity-graph.vercel.app`. Previous deployments at `https://activity-graph.herokuapp.com` (Heroku free tier discontinued) and `https://github-readme-activity-graph.cyclic.app` (Cyclic.sh shut down in early 2025) are no longer reachable. For background see [issue #197](https://github.com/Ashutosh00710/github-readme-activity-graph/issues/197#issuecomment-1560633754).
+There is no shared public deployment of this fork. Upstream's hosted instance at `https://github-readme-activity-graph.vercel.app` returns `402 DEPLOYMENT_DISABLED` (as of 2026-10-28), and the earlier ones at `https://activity-graph.herokuapp.com` (Heroku free tier discontinued) and `https://github-readme-activity-graph.cyclic.app` (Cyclic.sh shut down in early 2025) are gone too. For background see [issue #197](https://github.com/Ashutosh00710/github-readme-activity-graph/issues/197#issuecomment-1560633754).
 
-Please refer to the updated link [here](#how-to-use)
+[Deploy your own instance on Vercel](#deploy-on-your-own-vercel-instance), then replace `<your-deployment>` in the examples below with its domain.
 
 ## Table of contents
 
@@ -28,11 +28,10 @@ Please refer to the updated link [here](#how-to-use)
 - [Customization](#customization)
     - [Common Options](#common-options)
 - [Streak Card](#streak-card)
-- [Deploy on your own Replit instance](#deploy-on-your-own-replit-instance)
-    - [Follow the steps](#follow-the-steps)
 - [Deploy on your own Vercel instance](#deploy-on-your-own-vercel-instance)
     - [First Method](#first-method)
     - [Second Method](#second-method)
+    - [Proxy routes in this fork](#proxy-routes-in-this-fork)
     - [Finally](#finally)
 - [Contributing](#contributing)
 - [Core Team 💻](#core-team-)
@@ -43,22 +42,22 @@ Please refer to the updated link [here](#how-to-use)
 
 ## How to Use
 
-Just paste the following URL in your profile readme and you are good to go.
+[Deploy your own instance](#deploy-on-your-own-vercel-instance) first, then paste the following URL in your profile readme, replacing `<your-deployment>` with your Vercel domain.
 
 **Pass your `username` in the URL**
 
 ```md
-[![Ashutosh's github activity graph](https://github-readme-activity-graph.vercel.app/graph?username=Ashutosh00710)](https://github.com/ashutosh00710/github-readme-activity-graph)
+[![Ashutosh's github activity graph](https://<your-deployment>.vercel.app/graph?username=Ashutosh00710)](https://github.com/ashutosh00710/github-readme-activity-graph)
 ```
 
-### [Attention ⚠](#deploy-on-your-own-replit-instance)
+### [Attention ⚠](#deploy-on-your-own-vercel-instance)
 
 ## Use themes
 
 _`username=ashutosh00710&theme=theme_name`_
 
 ```md
-[![Ashutosh's github activity graph](https://github-readme-activity-graph.vercel.app/graph?username=Ashutosh00710&theme=dracula)](https://github.com/ashutosh00710/github-readme-activity-graph)
+[![Ashutosh's github activity graph](https://<your-deployment>.vercel.app/graph?username=Ashutosh00710&theme=dracula)](https://github.com/ashutosh00710/github-readme-activity-graph)
 ```
 
 [Manual Customization](#customization) is also available
@@ -120,13 +119,13 @@ Example:
 **`custom_title=This%20is%20a%20title`**
 
 ```md
-[![Ashutosh's github activity graph](https://github-readme-activity-graph.vercel.app/graph?username=ashutosh00710&custom_title=This%20is%20a%20title&hide_border=true)](https://github.com/ashutosh00710/github-readme-activity-graph)
+[![Ashutosh's github activity graph](https://<your-deployment>.vercel.app/graph?username=ashutosh00710&custom_title=This%20is%20a%20title&hide_border=true)](https://github.com/ashutosh00710/github-readme-activity-graph)
 ```
 
 **Example:**
 
 ```md
-[![Ashutosh's github activity graph](https://github-readme-activity-graph.vercel.app/graph?username=ashutosh00710&bg_color=fffff0&color=708090&line=24292e&point=24292e&area=true&border_color=ff0000)](https://github.com/ashutosh00710/github-readme-activity-graph)
+[![Ashutosh's github activity graph](https://<your-deployment>.vercel.app/graph?username=ashutosh00710&bg_color=fffff0&color=708090&line=24292e&point=24292e&area=true&border_color=ff0000)](https://github.com/ashutosh00710/github-readme-activity-graph)
 ```
 
 ## Streak Card
@@ -136,45 +135,12 @@ contributions, calculated from your full contribution history (every year since 
 created).
 
 ```md
-[![Ashutosh's github contribution streak](https://github-readme-activity-graph.vercel.app/streak?username=Ashutosh00710)](https://github.com/ashutosh00710/github-readme-activity-graph)
+[![Ashutosh's github contribution streak](https://<your-deployment>.vercel.app/streak?username=Ashutosh00710)](https://github.com/ashutosh00710/github-readme-activity-graph)
 ```
 
 It uses the same `theme`, `bg_color`, `border_color`, `color`, `title_color`, `radius`,
 `hide_title` and `custom_title` params as the activity graph above - see
 [Common Options](#common-options).
-
-## Deploy on your own Replit instance
-
-<details>
-<summary><b>Step-by-step instructions for deploying to Replit (from UI)</b></summary>
-
-#### Follow the steps
-
-1. Sign in to Replit or create a new account at https://replit.com
-2. Click the Deploy button below
-
- <a href="https://repl.it/github/Ashutosh00710/github-readme-activity-graph">
-   <img alt="Run on Repl.it" src="https://repl.it/badge/github/Ashutosh00710/github-readme-activity-graph" style="height: 40px; width: 190px;" />
- </a>
-
-3. On the page that comes up, choose language as `Node.js` and then click `Import from GitHub` Button
-
-    ![Replit](./asset/replit1.png)
-
-4. Visit [this link](https://github.com/settings/tokens/new?description=GitHub%20Readme%20Activity%20Graph) to create a new Personal Access Token
-5. Scroll to the bottom and click "**Generate token**"
-6. Wait clone done and add `Secrets` with your `Github token`
-
-    ![Secrets](./asset/replit2.png)
-
-7. Click the green `RUN` button on top, the console will run and at last the url will shows on the right
-8. Now just add the following to your profile readme and you're good to go
-
-```
-![Github Activity Graph](<url from step 5>/graph?username=<username>)
-```
-
-</details>
 
 ## Deploy on your own Vercel instance
 
@@ -195,33 +161,27 @@ It uses the same `theme`, `bg_color`, `border_color`, `color`, `title_color`, `r
     ![image](https://user-images.githubusercontent.com/3431285/235332320-d80e62c9-a7d9-45f3-8bef-b8950c4c9093.png)
 8.  Click the `Continue with GitHub` button, search for the required Git Repository and import it by clicking the `Import` button.
     ![image](https://user-images.githubusercontent.com/3431285/235332373-3f28309c-d70b-490e-aa40-4d55ad429d5a.png)
-9.  Create a personal access token (PAT) [here](https://github.com/settings/tokens/new) and enable the `repo` permissions (this allows access to see private repo stats).
-    ![image](https://user-images.githubusercontent.com/3431285/235332420-df83a424-009b-4f69-bbb2-54e807bff701.png)
-10. Add the PAT as an environment variable named `TOKEN`.
+9.  Create a fine-grained personal access token [here](https://github.com/settings/personal-access-tokens/new) with read-only access. This project only reads contribution data, so it needs no write permissions. Don't use a classic token with the `repo` scope: that grants full control of your private repositories.
+10. Add the token as an environment variable named `TOKEN`.
     ![image](https://user-images.githubusercontent.com/3431285/235332471-6915abf8-04fe-4f5e-b734-191388a77140.png)
 11. Click deploy, and you're good to go. See your domains to use the API!
 
 #### Second Method
 
-Alternatively, click the button below and follow the instructions.
+Alternatively, click the button below. Vercel asks for `TOKEN` before the first deploy: paste a fine-grained, read-only token created as in step 9 of the First Method.
 
-[![Deploy to Vercel](https://vercel.com/button)](https://vercel.com/import/project?template=https://github.com/Ashutosh00710/github-readme-activity-graph)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FKingRaver%2Fgithub-readme-activity-graph&env=TOKEN&envDescription=A%20fine-grained%2C%20read-only%20GitHub%20personal%20access%20token&envLink=https%3A%2F%2Fgithub.com%2Fsettings%2Fpersonal-access-tokens%2Fnew)
 
-After the deployment is complete:
+#### Proxy routes in this fork
 
-1. Click the `Continue to Dashboard` button
-   ![image](https://user-images.githubusercontent.com/3431285/235332677-addafd5f-dce8-4823-9927-05657eec2084.png)
-2. In the `Settings` tab, click on `Environment Variables` and follow steps `9.` and `10.` of `First Method`.
-   ![image](https://user-images.githubusercontent.com/3431285/235332731-03207969-b16e-42e4-858a-67b05af7bcc8.png)
-3. Go to `Deployments` tab and redeploy the project.
-   ![image](https://user-images.githubusercontent.com/3431285/235332761-1d3ae9c5-0138-447f-a41a-601c73ef3104.png)
+This fork's `vercel.json` has three routes that proxy to the maintainer's own services: `/stats` and `/top-langs` (a self-hosted [github-readme-stats](https://github.com/KingRaver/github-readme-stats) deployment) and `/substack-feed` (a Substack RSS feed). Delete them from `vercel.json` in your copy, or point them at your own services.
 
 #### Finally
 
 Now just add the following to your profile readme and you're good to go.
 
 ```md
-![Github Activity Graph](<{your_own_domain_name}.vercel.app>/graph?username=<username>)
+![Github Activity Graph](https://<your-deployment>.vercel.app/graph?username=<username>)
 ```
 
 </details>

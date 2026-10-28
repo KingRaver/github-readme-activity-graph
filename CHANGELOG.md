@@ -12,6 +12,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   returns 403 to GitHub Actions runners, so the profile README's blog-post workflow can read the
   feed through this route instead.
 
+### Changed
+
+- README: example URLs now use a `<your-deployment>.vercel.app` placeholder, since upstream's
+  hosted instance returns `402 DEPLOYMENT_DISABLED`. The deployment notice says there is no
+  shared instance and points to the deploy steps.
+- README: deploy steps ask for a fine-grained, read-only token instead of a classic token with the
+  `repo` scope. The Deploy to Vercel button now clones this fork and prompts for `TOKEN`, and a new
+  note says to remove the fork's own `/stats`, `/top-langs` and `/substack-feed` proxy routes.
+
+### Removed
+
+- README: the Replit deployment section. This fork's proxy routes only work on Vercel.
+
 ## [2026-10-27]
 
 ### Added
