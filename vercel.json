@@ -16,6 +16,10 @@
             "dest": "https://github-readme-stats-psi-lyart.vercel.app/api/top-langs"
         },
         {
+            "src": "/substack-feed",
+            "dest": "https://jeffspirlock.substack.com/feed"
+        },
+        {
             "src": "/(.*)",
             "dest": "src/main.ts"
         }
